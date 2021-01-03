@@ -1,0 +1,160 @@
+package com.cosateca.apirest.entidades;
+
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+import com.cosateca.apirest.enumerados.TipoIdentificacion;
+
+@Entity(name = "usuarios")
+public class Usuario implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	private Integer codigo_postal;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String nombre;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String primer_apellido;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String segundo_apellido;
+
+	@NotBlank
+	@Column(nullable = false)
+	private String telefono;
+
+	@NotBlank
+	@Email
+	@Column(nullable = false, unique = true)
+	private String direccion_email;
+
+	@Valid
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "cuenta_id", nullable = false, unique = true)
+	private Cuenta cuenta;
+
+	@Valid
+	@OneToOne(optional = false)
+	@JoinColumn(name = "carro_compra_id", nullable = false, unique = true)
+	private CarroCompra carro_compra;
+
+	@Column(nullable = false)
+	private TipoIdentificacion tipo_identificacion;
+	
+	@NotBlank
+	@Column(nullable = false)
+	private String codigo_identificacion;
+
+	
+	public TipoIdentificacion getTipo_identificacion() {
+		return tipo_identificacion;
+	}
+
+	public void setTipo_identificacion(TipoIdentificacion tipo_identificacion) {
+		this.tipo_identificacion = tipo_identificacion;
+	}
+
+	public String getCodigo_identificacion() {
+		return codigo_identificacion;
+	}
+
+	public void setCodigo_identificacion(String codigo_identificacion) {
+		this.codigo_identificacion = codigo_identificacion;
+	}
+
+	public CarroCompra getCarro_compra() {
+		return carro_compra;
+	}
+
+	public void setCarro_compra(CarroCompra carro_compra) {
+		this.carro_compra = carro_compra;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Integer getCodigo_postal() {
+		return codigo_postal;
+	}
+
+	public void setCodigo_postal(Integer codigo_postal) {
+		this.codigo_postal = codigo_postal;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public String getPrimer_apellido() {
+		return primer_apellido;
+	}
+
+	public void setPrimer_apellido(String primer_apellido) {
+		this.primer_apellido = primer_apellido;
+	}
+
+	public String getSegundo_apellido() {
+		return segundo_apellido;
+	}
+
+	public void setSegundo_apellido(String segundo_apellido) {
+		this.segundo_apellido = segundo_apellido;
+	}
+
+	public String getTelefono() {
+		return telefono;
+	}
+
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
+	}
+
+	public String getDireccion_email() {
+		return direccion_email;
+	}
+
+	public void setDireccion_email(String direccion_email) {
+		this.direccion_email = direccion_email;
+	}
+
+	public Cuenta getCuenta() {
+		return cuenta;
+	}
+
+	public void setCuenta(Cuenta cuenta) {
+		this.cuenta = cuenta;
+	}
+
+}
