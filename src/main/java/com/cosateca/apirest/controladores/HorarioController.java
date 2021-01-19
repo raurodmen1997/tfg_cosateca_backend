@@ -9,6 +9,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -41,6 +44,13 @@ public class HorarioController {
 	}
 	
 	
+	@GetMapping("page/{page}")
+	public Page<Horario> findAll(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 4);
+		return this.horarioService.findAllByPage(pageable);
+	}
+	
+	
 	@GetMapping("/{horario_id}")
 	public ResponseEntity<?> findOne(@PathVariable Long horario_id) {
 		Horario horario = null;
@@ -61,7 +71,6 @@ public class HorarioController {
 		
 		return new ResponseEntity<Horario>(horario, HttpStatus.OK);
 	}
-	
 	
 	
 	@PostMapping("")
@@ -93,7 +102,7 @@ public class HorarioController {
 	
 	
 	@PutMapping("/{horario_id}")
-	public ResponseEntity<?> actualizarHorario(@RequestBody Horario horario, @PathVariable Long horario_id) throws Exception {
+	public ResponseEntity<?> actualizarHorario(@Valid @RequestBody Horario horario, @PathVariable Long horario_id, BindingResult result) throws Exception {
 		Map<String, Object> response = new HashMap<String, Object>();
 		Horario horarioActualizado = null;
 		Horario horarioRecuperado = null;
@@ -101,7 +110,7 @@ public class HorarioController {
 		try {
 			horarioRecuperado = this.horarioService.findOne(horario_id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al obtener el horario por identificador.");
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
@@ -111,6 +120,13 @@ public class HorarioController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 		}
 		
+		if(result.hasErrors()) {
+			List<String> errores = result.getFieldErrors().stream()
+				.map(err -> "Error en el campo '" + err.getField() + "': " + err.getDefaultMessage())
+				.collect(Collectors.toList());
+			response.put("errores", errores);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST); 
+		}		
 		
 		try {
 			horarioRecuperado.setDia(horario.getDia());
@@ -119,7 +135,7 @@ public class HorarioController {
 			horarioRecuperado.setAyuntamiento(horario.getAyuntamiento());
 			horarioActualizado = horarioService.guardarHorario(horarioRecuperado);
 		}catch(DataAccessException e) {
-			response.put("mensaje", "Error al realizar el put en la base de datos.");
+			response.put("mensaje", "Error al realizar el update en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
@@ -129,18 +145,17 @@ public class HorarioController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED); 
 			
 	}
-	
-	
+		
 	
 	@DeleteMapping("/{horario_id}")
-	public ResponseEntity<?> eliminarHorario(@PathVariable Long horario_id /*,  @RequestParam String username */) {
+	public ResponseEntity<?> eliminarHorario(@PathVariable Long horario_id) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		Horario horario = null;
 		
 		try {
 			horario = this.horarioService.findOne(horario_id);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al obtener el horario por identificador.");
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
@@ -151,34 +166,15 @@ public class HorarioController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 		}
 		
-		/*
-		
-		if(this.alumnoService.alumnosDeUnHorario(horario.getId()).size() > 0) {
-			response.put("mensaje",	 "El horario con ID: ".concat(horario.getId().toString()).concat(" no se puede editar porque tiene alumnos dentro"));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
-		}
-		Profesor profesor = this.profesorService.findByUsername(username);
-		if(profesor != null) {
-			if(!profesor.equals(horario.getEspacio().getProfesor())) {
-				response.put("mensaje",	 "El profesor no pertenece al horario cuyo id es ".concat(horarioId.toString()));
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
-			}
-		}else {
-			response.put("mensaje",	 "El Username no existe");
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
-			
-		}
-		*/
-		
 		try {
 			this.horarioService.delete(horario);
 		}catch(DataAccessException e) {
-			response.put("mensaje", "Error al eliminar el horario de la base de datos.");
+			response.put("mensaje", "Error al realizar el delete en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 		
-		response.put("mensaje", "El horario ha sido borrado con exito.");
+		response.put("mensaje", "El horario ha sido borrado con éxito.");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 		
 		

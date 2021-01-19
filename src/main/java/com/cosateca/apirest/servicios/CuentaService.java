@@ -24,4 +24,9 @@ public class CuentaService implements ICuentaService{
 		return this.cuentaRepository.findAll();
 	}
 
+	@Override
+	public Cuenta guardarCuenta(Cuenta cuenta) {
+		return this.cuentaRepository.save(cuenta);
+	}
+
 }

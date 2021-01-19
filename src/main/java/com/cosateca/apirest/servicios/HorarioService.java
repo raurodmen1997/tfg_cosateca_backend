@@ -3,6 +3,8 @@ package com.cosateca.apirest.servicios;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.cosateca.apirest.entidades.Horario;
@@ -20,6 +22,12 @@ public class HorarioService implements IHorarioService{
 	}
 
 	@Override
+	public Page<Horario> findAllByPage(Pageable pageable) {
+		return this.horarioRepository.findAll(pageable);
+	}
+
+	
+	@Override
 	public Horario guardarHorario(Horario horario) {
 		return this.horarioRepository.save(horario);
 	}
@@ -35,5 +43,6 @@ public class HorarioService implements IHorarioService{
 		
 	}
 
+	
 	
 }

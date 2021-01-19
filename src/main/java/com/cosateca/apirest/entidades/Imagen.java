@@ -20,7 +20,7 @@ public class Imagen implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 1000)
+	@Column(nullable = false, length = 100000)
 	private byte[] bytes;
 
 	public Long getId() {

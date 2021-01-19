@@ -24,4 +24,9 @@ public class PeticionDonacionService implements IPeticionDonacionService{
 		return this.peticionDonacionRepository.findAll();
 	}
 
+	@Override
+	public PeticionDonacion findOne(Long peticion_donacion_id) {
+		return this.peticionDonacionRepository.findById(peticion_donacion_id).orElse(null);
+	}
+
 }

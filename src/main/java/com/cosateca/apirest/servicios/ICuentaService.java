@@ -9,4 +9,6 @@ public interface ICuentaService {
 	Cuenta findCuentaByUserAndPass(String perfil, String pass);
 	
 	List<Cuenta> findAll();
+	
+	Cuenta guardarCuenta(Cuenta cuenta);
 }

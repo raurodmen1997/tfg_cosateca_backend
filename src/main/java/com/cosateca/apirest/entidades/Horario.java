@@ -48,7 +48,7 @@ public class Horario implements Serializable {
 	private Ayuntamiento ayuntamiento;
 
 	@Column(nullable = false)
-	@ValueEnum(enumClass = DiaSemana.class, message = "Debe contener alguno de estos valores: 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' o 'Domingo'")
+	@ValueEnum(enumClass = DiaSemana.class, message = "Debe contener alguno de estos valores: 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'")
 	private String dia;
 
 	public String getDia() {

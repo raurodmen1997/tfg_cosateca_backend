@@ -10,8 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+
+import com.cosateca.apirest.enumerados.CategoriaHerramienta;
+
+import validadores.ValueEnum;
 
 @Entity(name = "objetos")
 public class Objeto implements Serializable {
@@ -28,8 +33,8 @@ public class Objeto implements Serializable {
 	@Column(nullable = false)
 	private Boolean accesible;
 
-	@NotBlank
 	@Column(nullable = false)
+	@ValueEnum(enumClass = CategoriaHerramienta.class, message = "Debe contener alguno de estos valores: 'Montaje', 'Medición', 'Sujeción', 'Corte', 'Unión', 'Golpe'")
 	private String categoria;
 
 	@NotBlank
@@ -45,6 +50,18 @@ public class Objeto implements Serializable {
 	@JoinColumn(name = "imagen_id", nullable = false)
 	private Imagen imagen;
 
+	@Valid
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "ayuntamiento_id", nullable = false)
+	private Ayuntamiento ayuntamiento;
+
+	
+	@PrePersist
+	public void prePersist() {
+		this.accesible = true;
+	}
+	
+	
 	public Imagen getImagen() {
 		return imagen;
 	}
@@ -52,12 +69,8 @@ public class Objeto implements Serializable {
 	public void setImagen(Imagen imagen) {
 		this.imagen = imagen;
 	}
-
-	@Valid
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "ayuntamiento_id", nullable = false)
-	private Ayuntamiento ayuntamiento;
-
+	
+	
 	public Long getId() {
 		return id;
 	}

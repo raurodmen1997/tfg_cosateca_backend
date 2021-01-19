@@ -19,5 +19,17 @@ public class UsuarioService implements IUsuarioService{
 		return this.usuarioRepository.findUsuarioByCuenta(id);
 	}
 
+
+	@Override
+	public Usuario guardarUsuario(Usuario usuario) {
+		return this.usuarioRepository.save(usuario);
+	}
+
+
+	@Override
+	public Usuario findOne(Long id) {
+		return this.usuarioRepository.findById(id).orElse(null);
+	}
+
 	
 }

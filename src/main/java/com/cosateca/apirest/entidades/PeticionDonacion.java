@@ -14,7 +14,10 @@ import javax.persistence.PrePersist;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
+import com.cosateca.apirest.enumerados.CategoriaHerramienta;
 import com.cosateca.apirest.enumerados.EstadoPeticionDonacion;
+
+import validadores.ValueEnum;
 
 @Entity(name = "peticiones_donaciones")
 public class PeticionDonacion implements Serializable {
@@ -28,8 +31,8 @@ public class PeticionDonacion implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
+	@ValueEnum(enumClass = CategoriaHerramienta.class, message = "Debe contener alguno de estos valores: 'Montaje', 'Medición', 'Sujeción', 'Corte', 'Unión', 'Golpe'")
 	private String categoria;
 
 	@NotBlank
@@ -37,7 +40,8 @@ public class PeticionDonacion implements Serializable {
 	private String descripcion;
 
 	@Column(nullable = false)
-	private EstadoPeticionDonacion estado;
+	@ValueEnum(enumClass = EstadoPeticionDonacion.class, message = "Debe contener alguno de estos valores: 'PENDIENTE_DE_REVISION', 'ACEPTADA', 'RECHAZADA'")
+	private String estado;
 
 	@NotBlank
 	@Column(nullable = false)
@@ -57,18 +61,17 @@ public class PeticionDonacion implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario usuario;
-	
-	
+
 	@PrePersist
 	public void prePersist() {
-		this.estado = EstadoPeticionDonacion.PENDIENTE_DE_REVISION;
+		this.estado = EstadoPeticionDonacion.PENDIENTE_DE_REVISION.name();
 	}
 
-	public EstadoPeticionDonacion getEstado() {
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadoPeticionDonacion estado) {
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
 

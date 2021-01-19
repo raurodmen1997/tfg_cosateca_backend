@@ -9,5 +9,7 @@ public interface IPeticionDonacionService {
 	List<PeticionDonacion> findAll();
 	
 	PeticionDonacion guardaPeticionDonacion(PeticionDonacion peticionDonacion);
+	
+	PeticionDonacion findOne(Long peticion_donacion_id);
 
 }

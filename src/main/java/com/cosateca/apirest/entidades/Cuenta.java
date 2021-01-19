@@ -30,6 +30,7 @@ public class Cuenta implements Serializable {
 	
 	@NotBlank
 	@Column(nullable = false)
+	//@Pattern(regexp = "^?\\w*\\d?\\w*[A-Z]?\\w*[a-z]\\S{8,}$", message = "Debe contener, al menos, 8 caracteres, 1 letra minúscula, 1 letra mayúscula y 1 dígito.")
 	private String pass;
 	
 	

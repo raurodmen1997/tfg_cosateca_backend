@@ -13,8 +13,11 @@ import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 import com.cosateca.apirest.enumerados.TipoIdentificacion;
+
+import validadores.ValueEnum;
 
 @Entity(name = "usuarios")
 public class Usuario implements Serializable {
@@ -28,7 +31,10 @@ public class Usuario implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	private Integer codigo_postal;
+	@NotBlank
+	@Column(nullable = false)
+	@Pattern(regexp = "^\\d{5}$", message = "Debe ser un número de 5 dígitos.")
+	private String codigo_postal;
 
 	@NotBlank
 	@Column(nullable = false)
@@ -62,18 +68,27 @@ public class Usuario implements Serializable {
 	private CarroCompra carro_compra;
 
 	@Column(nullable = false)
-	private TipoIdentificacion tipo_identificacion;
-	
+	@ValueEnum(enumClass = TipoIdentificacion.class, message = "Debe contener alguno de estos valores: 'NIF', 'NIE'")
+	private String tipo_identificacion;
+
 	@NotBlank
 	@Column(nullable = false)
+	@Pattern(regexp = "^\\d{8}[a-zA-Z]{1}$|^[XxTtYyZz]{1}[0-9]{7}[a-zA-Z]{1}$", message = "Debe contener un NIF o NIE válido.")
 	private String codigo_identificacion;
 
-	
-	public TipoIdentificacion getTipo_identificacion() {
+	public String getCodigo_postal() {
+		return codigo_postal;
+	}
+
+	public void setCodigo_postal(String codigo_postal) {
+		this.codigo_postal = codigo_postal;
+	}
+
+	public String getTipo_identificacion() {
 		return tipo_identificacion;
 	}
 
-	public void setTipo_identificacion(TipoIdentificacion tipo_identificacion) {
+	public void setTipo_identificacion(String tipo_identificacion) {
 		this.tipo_identificacion = tipo_identificacion;
 	}
 
@@ -99,14 +114,6 @@ public class Usuario implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Integer getCodigo_postal() {
-		return codigo_postal;
-	}
-
-	public void setCodigo_postal(Integer codigo_postal) {
-		this.codigo_postal = codigo_postal;
 	}
 
 	public String getNombre() {

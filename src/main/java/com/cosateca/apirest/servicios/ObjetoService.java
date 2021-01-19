@@ -1,5 +1,7 @@
 package com.cosateca.apirest.servicios;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,11 @@ public class ObjetoService implements IObjetoService{
 	@Override
 	public Objeto guardarObjeto(Objeto objeto) {
 		return this.objetoRepository.save(objeto);
+	}
+
+	@Override
+	public List<Objeto> findAllObjetos() {
+		return this.objetoRepository.findAll();
 	}
 
 }
