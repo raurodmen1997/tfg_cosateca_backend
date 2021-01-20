@@ -19,11 +19,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosateca.apirest.entidades.ListaFavorito;
+import com.cosateca.apirest.entidades.Objeto;
 import com.cosateca.apirest.entidades.Usuario;
 import com.cosateca.apirest.servicios.ListaFavoritoService;
+import com.cosateca.apirest.servicios.ObjetoService;
 import com.cosateca.apirest.servicios.UsuarioService;
 
 @RestController
@@ -36,6 +39,9 @@ public class ListaFavoritoController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private ObjetoService objetoService;
 	
 	
 	
@@ -152,6 +158,111 @@ public class ListaFavoritoController {
 		
 		return new ResponseEntity<List<ListaFavorito>>(listasFavorito, HttpStatus.OK);
 	}
+	
+	
+	
+	
+	@GetMapping("/guardarObjeto")
+	public ResponseEntity<?> guardarObjetoListaFavorito(@RequestParam Long listaFavorito_id, @RequestParam Long objeto_id) {
+		ListaFavorito listaFavorito = null;
+		Objeto objeto = null;
+		ListaFavorito listaFavoritoNueva = new ListaFavorito();
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			listaFavorito = this.listaFavoritoService.findOne(listaFavorito_id);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		if(listaFavorito == null) {
+			response.put("mensaje",	 "La lista de favorito con id '".concat(listaFavorito_id.toString()).concat("' no existe."));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		try {
+			objeto = this.objetoService.findOne(objeto_id);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		if(objeto == null) {
+			response.put("mensaje",	 "El objeto con id '".concat(objeto_id.toString()).concat("' no existe."));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		try {			
+			listaFavoritoNueva = this.listaFavoritoService.guardarObjetoListaFavorito(listaFavorito, objeto);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar el guardado del objeto en la lista.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		response.put("mensaje", "Se ha guardado el objeto con éxito.");
+		response.put("listaFavorito", listaFavoritoNueva);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/eliminarObjeto")
+	public ResponseEntity<?> eliminarObjetoListaFavorito(@RequestParam Long listaFavorito_id, @RequestParam Long objeto_id) {
+		ListaFavorito listaFavorito = null;
+		Objeto objeto = null;
+		ListaFavorito listaFavoritoNueva = new ListaFavorito();
+		Map<String, Object> response = new HashMap<String, Object>();
+		
+		try {
+			listaFavorito = this.listaFavoritoService.findOne(listaFavorito_id);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		if(listaFavorito == null) {
+			response.put("mensaje",	 "La lista de favorito con id '".concat(listaFavorito_id.toString()).concat("' no existe."));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		try {
+			objeto = this.objetoService.findOne(objeto_id);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		if(objeto == null) {
+			response.put("mensaje",	 "El objeto con id '".concat(objeto_id.toString()).concat("' no existe."));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		if(!listaFavorito.getObjetos().contains(objeto)) {
+			response.put("mensaje",	 "El objeto con id '".concat(objeto_id.toString()).concat("' no se encuentra en la lista con id '".concat(listaFavorito_id.toString()).concat("'.")));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		try {			
+			listaFavoritoNueva = this.listaFavoritoService.eliminarObjetoListaFavorito(listaFavorito, objeto);
+		}catch(DataAccessException e) {
+			response.put("mensaje", "Error al realizar el borrado del objeto en la lista.");
+			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
+		}
+		
+		response.put("mensaje", "Se ha eliminado el objeto con éxito.");
+		response.put("listaFavorito", listaFavoritoNueva);
+		
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	
 	
 
 }

@@ -62,11 +62,12 @@ public class Usuario implements Serializable {
 	@JoinColumn(name = "cuenta_id", nullable = false, unique = true)
 	private Cuenta cuenta;
 
+	/*
 	@Valid
 	@OneToOne(optional = false)
 	@JoinColumn(name = "carro_compra_id", nullable = false, unique = true)
 	private CarroCompra carro_compra;
-
+*/
 	@Column(nullable = false)
 	@ValueEnum(enumClass = TipoIdentificacion.class, message = "Debe contener alguno de estos valores: 'NIF', 'NIE'")
 	private String tipo_identificacion;
@@ -100,13 +101,13 @@ public class Usuario implements Serializable {
 		this.codigo_identificacion = codigo_identificacion;
 	}
 
-	public CarroCompra getCarro_compra() {
-		return carro_compra;
-	}
-
-	public void setCarro_compra(CarroCompra carro_compra) {
-		this.carro_compra = carro_compra;
-	}
+//	public CarroCompra getCarro_compra() {
+//		return carro_compra;
+//	}
+//
+//	public void setCarro_compra(CarroCompra carro_compra) {
+//		this.carro_compra = carro_compra;
+//	}
 
 	public Long getId() {
 		return id;

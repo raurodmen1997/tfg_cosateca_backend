@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -58,10 +59,27 @@ public class PeticionReserva implements Serializable {
 	@JoinColumn(name = "objeto_id", nullable = false)
 	private Objeto objeto;
 
-	@Valid
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "carro_compra_id", nullable = false)
-	private CarroCompra carro_compra;
+	@Column(nullable = false)
+	private Boolean realizada;
+//	@Valid
+//	@ManyToOne(optional = false)
+//	@JoinColumn(name = "carro_compra_id", nullable = false)
+//	private CarroCompra carro_compra;
+
+	
+	@PrePersist
+	public void prePersist() {
+		this.realizada = false;
+	}
+	
+	
+	public Boolean getRealizada() {
+		return realizada;
+	}
+
+	public void setRealizada(Boolean realizada) {
+		this.realizada = realizada;
+	}
 
 	public EstadoPeticionReserva getEstado() {
 		return estado;
@@ -119,12 +137,12 @@ public class PeticionReserva implements Serializable {
 		this.objeto = objeto;
 	}
 
-	public CarroCompra getCarro_compra() {
-		return carro_compra;
-	}
-
-	public void setCarro_compra(CarroCompra carro_compra) {
-		this.carro_compra = carro_compra;
-	}
+//	public CarroCompra getCarro_compra() {
+//		return carro_compra;
+//	}
+//
+//	public void setCarro_compra(CarroCompra carro_compra) {
+//		this.carro_compra = carro_compra;
+//	}
 
 }

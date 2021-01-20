@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cosateca.apirest.entidades.CarroCompra;
 import com.cosateca.apirest.entidades.Cuenta;
 import com.cosateca.apirest.entidades.Usuario;
 import com.cosateca.apirest.enumerados.TipoIdentificacion;
-import com.cosateca.apirest.servicios.CarroCompraService;
 import com.cosateca.apirest.servicios.CuentaService;
 import com.cosateca.apirest.servicios.UsuarioService;
 import com.cosateca.apirest.utilidades.MD5;
@@ -40,8 +38,8 @@ public class UsuarioController {
 	@Autowired
 	private CuentaService cuentaService;
 	
-	@Autowired
-	private CarroCompraService carroCompraService;
+//	@Autowired
+//	private CarroCompraService carroCompraService;
 	
 	
 	@PostMapping("")
@@ -50,8 +48,8 @@ public class UsuarioController {
 		Usuario usuarioNuevo= null;
 		Cuenta cuenta = new Cuenta();
 		Cuenta cuentaNueva = null;
-		CarroCompra carroCompra =  new CarroCompra();
-		CarroCompra carroCompraNuevo = null;
+//		CarroCompra carroCompra =  new CarroCompra();
+//		CarroCompra carroCompraNuevo = null;
 		
 		if(result.hasErrors()) {
 			List<String> errores = result.getFieldErrors().stream()
@@ -87,18 +85,18 @@ public class UsuarioController {
 		}
 		
 		
-		try {
-			carroCompraNuevo = this.carroCompraService.guardarCarroCompra(carroCompra);
-		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en la tabla 'carros_compra' de la base de datos");
-			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+//		try {
+//			carroCompraNuevo = this.carroCompraService.guardarCarroCompra(carroCompra);
+//		} catch (DataAccessException e) {
+//			response.put("mensaje", "Error al realizar el insert en la tabla 'carros_compra' de la base de datos");
+//			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+//			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+//		}
 			
 		
 		try {
 			usuario.setCuenta(cuentaNueva);
-			usuario.setCarro_compra(carroCompraNuevo);
+//			usuario.setCarro_compra(carroCompraNuevo);
 			usuarioNuevo = this.usuarioService.guardarUsuario(usuario);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la tabla 'Usuarios' de la base de datos");

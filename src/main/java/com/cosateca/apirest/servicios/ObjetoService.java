@@ -24,4 +24,9 @@ public class ObjetoService implements IObjetoService{
 		return this.objetoRepository.findAll();
 	}
 
+	@Override
+	public Objeto findOne(Long objeto_id) {
+		return this.objetoRepository.findById(objeto_id).orElse(null);
+	}
+
 }

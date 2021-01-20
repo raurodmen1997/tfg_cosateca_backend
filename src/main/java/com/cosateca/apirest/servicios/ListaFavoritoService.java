@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cosateca.apirest.entidades.ListaFavorito;
+import com.cosateca.apirest.entidades.Objeto;
 import com.cosateca.apirest.repositorios.ListaFavoritoRepository;
 
 @Service
@@ -32,6 +33,18 @@ public class ListaFavoritoService implements IListaFavoritoService{
 	@Override
 	public List<ListaFavorito> listasFavoritoByUser(Long id) {
 		return this.listaFavoritoRepository.listasFavoritoByUser(id);
+	}
+
+	@Override
+	public ListaFavorito guardarObjetoListaFavorito(ListaFavorito lista, Objeto objeto) {
+		lista.getObjetos().add(objeto);
+		return guardarListaFavorito(lista);
+	}
+
+	@Override
+	public ListaFavorito eliminarObjetoListaFavorito(ListaFavorito lista, Objeto objeto) {
+		lista.getObjetos().remove(objeto);
+		return guardarListaFavorito(lista);
 	}
 
 }
