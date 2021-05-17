@@ -47,4 +47,10 @@ public class ListaFavoritoService implements IListaFavoritoService{
 		return guardarListaFavorito(lista);
 	}
 
+	@Override
+	public void eliminarListasUsuario(Long id) {
+		this.listaFavoritoRepository.eliminarListasUsuario(id);
+		
+	}
+
 }

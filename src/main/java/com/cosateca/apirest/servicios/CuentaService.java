@@ -29,4 +29,14 @@ public class CuentaService implements ICuentaService{
 		return this.cuentaRepository.save(cuenta);
 	}
 
+	@Override
+	public Cuenta findCuentaByUser(String perfil) {
+		return this.cuentaRepository.findCuentaByUser(perfil);
+	}
+
+	@Override
+	public Cuenta findOne(Long cuenta_id) {
+		return this.cuentaRepository.findById(cuenta_id).orElse(null);
+	}
+
 }

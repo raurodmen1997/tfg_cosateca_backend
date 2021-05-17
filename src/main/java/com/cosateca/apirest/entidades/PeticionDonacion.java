@@ -1,6 +1,7 @@
 package com.cosateca.apirest.entidades;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +12,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.cosateca.apirest.enumerados.CategoriaHerramienta;
 import com.cosateca.apirest.enumerados.EstadoPeticionDonacion;
@@ -61,10 +66,18 @@ public class PeticionDonacion implements Serializable {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "usuario_id", nullable = false)
 	private Usuario usuario;
+	
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date fecha_creacion;
+
+	
 
 	@PrePersist
 	public void prePersist() {
 		this.estado = EstadoPeticionDonacion.PENDIENTE_DE_REVISION.name();
+		this.fecha_creacion = new Date();
 	}
 
 	public String getEstado() {
@@ -131,4 +144,11 @@ public class PeticionDonacion implements Serializable {
 		this.usuario = usuario;
 	}
 
+	public Date getFecha_creacion() {
+		return fecha_creacion;
+	}
+
+	public void setFecha_creacion(Date fecha_creacion) {
+		this.fecha_creacion = fecha_creacion;
+	}
 }

@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -62,12 +63,6 @@ public class Usuario implements Serializable {
 	@JoinColumn(name = "cuenta_id", nullable = false, unique = true)
 	private Cuenta cuenta;
 
-	/*
-	@Valid
-	@OneToOne(optional = false)
-	@JoinColumn(name = "carro_compra_id", nullable = false, unique = true)
-	private CarroCompra carro_compra;
-*/
 	@Column(nullable = false)
 	@ValueEnum(enumClass = TipoIdentificacion.class, message = "Debe contener alguno de estos valores: 'NIF', 'NIE'")
 	private String tipo_identificacion;
@@ -76,6 +71,22 @@ public class Usuario implements Serializable {
 	@Column(nullable = false)
 	@Pattern(regexp = "^\\d{8}[a-zA-Z]{1}$|^[XxTtYyZz]{1}[0-9]{7}[a-zA-Z]{1}$", message = "Debe contener un NIF o NIE válido.")
 	private String codigo_identificacion;
+
+	@Column(nullable = false)
+	private Boolean olvidado;
+	
+	@PrePersist
+	public void prePersist() {
+		this.olvidado = false;
+	}
+
+	public Boolean getOlvidado() {
+		return olvidado;
+	}
+
+	public void setOlvidado(Boolean olvidado) {
+		this.olvidado = olvidado;
+	}
 
 	public String getCodigo_postal() {
 		return codigo_postal;
@@ -100,14 +111,6 @@ public class Usuario implements Serializable {
 	public void setCodigo_identificacion(String codigo_identificacion) {
 		this.codigo_identificacion = codigo_identificacion;
 	}
-
-//	public CarroCompra getCarro_compra() {
-//		return carro_compra;
-//	}
-//
-//	public void setCarro_compra(CarroCompra carro_compra) {
-//		this.carro_compra = carro_compra;
-//	}
 
 	public Long getId() {
 		return id;

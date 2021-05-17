@@ -20,4 +20,9 @@ public class AyuntamientoService implements IAyuntamientoService{
 		return this.ayuntamientoRepository.findAyuntamientoByCuenta(id);
 	}
 
+	@Override
+	public Ayuntamiento obtenerAyuntamiento() {
+		return this.ayuntamientoRepository.findAll().get(0);
+	}
+
 }

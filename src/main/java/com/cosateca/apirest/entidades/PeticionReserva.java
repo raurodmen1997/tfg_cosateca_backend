@@ -61,11 +61,6 @@ public class PeticionReserva implements Serializable {
 
 	@Column(nullable = false)
 	private Boolean realizada;
-//	@Valid
-//	@ManyToOne(optional = false)
-//	@JoinColumn(name = "carro_compra_id", nullable = false)
-//	private CarroCompra carro_compra;
-
 	
 	@PrePersist
 	public void prePersist() {
@@ -136,13 +131,5 @@ public class PeticionReserva implements Serializable {
 	public void setObjeto(Objeto objeto) {
 		this.objeto = objeto;
 	}
-
-//	public CarroCompra getCarro_compra() {
-//		return carro_compra;
-//	}
-//
-//	public void setCarro_compra(CarroCompra carro_compra) {
-//		this.carro_compra = carro_compra;
-//	}
 
 }

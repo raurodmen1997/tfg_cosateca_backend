@@ -18,4 +18,8 @@ public interface IListaFavoritoService {
 	ListaFavorito guardarObjetoListaFavorito(ListaFavorito lista, Objeto objeto);
 	
 	ListaFavorito eliminarObjetoListaFavorito(ListaFavorito lista, Objeto objeto);
+	
+	void eliminarListasUsuario(Long id);
+	
+	
 }

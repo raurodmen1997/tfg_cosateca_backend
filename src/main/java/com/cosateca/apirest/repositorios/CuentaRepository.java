@@ -12,4 +12,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta, Long>{
 	@Query("select c from cuentas c where c.nombre_perfil=?1 and c.pass=?2")
 	Cuenta findCuentaByUserAndPass(String perfil, String pass);
 	
+	@Query("select c from cuentas c where c.nombre_perfil=?1")
+	Cuenta findCuentaByUser(String perfil);
+	
 }

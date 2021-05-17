@@ -60,7 +60,7 @@ public class LoginController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 		}
 		
-		if(cuenta.getAutoridad().equals(Autoridad.USUARIO_ADMIN)) {
+		if(cuenta.getAutoridad().equals(Autoridad.ROLE_ADMIN)) {
 			return new ResponseEntity<Ayuntamiento>(this.ayuntamientoService.findAyuntamientoByCuenta(cuenta.getId()), HttpStatus.OK);
 		}
 		

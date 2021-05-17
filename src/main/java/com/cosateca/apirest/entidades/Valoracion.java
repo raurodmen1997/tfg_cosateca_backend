@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -52,6 +53,12 @@ public class Valoracion implements Serializable {
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fecha_creacion;
+	
+	
+	@PrePersist
+	public void prePersist() {
+		this.fecha_creacion = new Date();
+	}
 
 	public Double getPuntuacion() {
 		return puntuacion;
