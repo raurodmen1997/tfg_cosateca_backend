@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ public class MailController {
 	private MailService mailService;
 
 	@PostMapping("/enviar")
+	@Secured({"ROLE_USER", "ROLE_ADMIN"})
 	public ResponseEntity<?> enviarEmail(@RequestParam String to, @RequestParam String subject,
 			@RequestParam String body) {
 

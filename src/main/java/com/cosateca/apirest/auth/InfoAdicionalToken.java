@@ -49,6 +49,8 @@ public class InfoAdicionalToken implements TokenEnhancer{
 		if(cuenta.getAutoridad().equals(Autoridad.ROLE_ADMIN)) {
 			info.put("nombre", ayuntamiento.getNombre());
 			info.put("direccion_email", ayuntamiento.getDireccion_email());
+			info.put("telefono", ayuntamiento.getTelefono());
+			info.put("direccion", ayuntamiento.getDireccion());
 			info.put("id", ayuntamiento.getId());
 		}
 		
@@ -62,6 +64,7 @@ public class InfoAdicionalToken implements TokenEnhancer{
 			info.put("codigo_postal", usuario.getCodigo_postal());
 			info.put("codigo_identificacion", usuario.getCodigo_identificacion());
 			info.put("tipo_identificacion", usuario.getTipo_identificacion());
+			info.put("olvidado", usuario.getOlvidado());
 			info.put("id_cuenta", usuario.getCuenta().getId());
 		}
 		

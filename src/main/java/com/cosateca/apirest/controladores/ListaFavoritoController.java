@@ -257,6 +257,13 @@ public class ListaFavoritoController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
 		}
 		
+		
+		if(listaFavorito.getObjetos().contains(objeto)){
+			response.put("mensaje",	 "El objeto seleccionado ya se encuentra dentro de la lista ".concat("'" + listaFavorito.getNombre() + "'."));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
+		}
+		
+		
 		try {			
 			listaFavoritoNueva = this.listaFavoritoService.guardarObjetoListaFavorito(listaFavorito, objeto);
 		}catch(DataAccessException e) {

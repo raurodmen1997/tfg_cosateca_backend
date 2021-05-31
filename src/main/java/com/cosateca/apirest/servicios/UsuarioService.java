@@ -3,6 +3,8 @@ package com.cosateca.apirest.servicios;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +49,12 @@ public class UsuarioService implements IUsuarioService{
 	}
 
 
+	/*
 	@Override
 	public List<Usuario> usuarioASerOlvidados() {
 		return this.usuarioRepository.usuariosASerOlvidados();
 	}
+	*/
 
 
 	@Override
@@ -61,6 +65,18 @@ public class UsuarioService implements IUsuarioService{
 		this.peticionReservaService.eliminarPeticionesReservaUsuario(usuario.getId());
 		this.listaService.eliminarListasUsuario(usuario.getId());
 		this.usuarioRepository.delete(usuario);
+	}
+
+
+	@Override
+	public Page<Usuario> usuariosASerOlvidados(Pageable pageable) {
+		return this.usuarioRepository.usuariosASerOlvidados(pageable);
+	}
+
+
+	@Override
+	public List<Usuario> usuarioASerOlvidados() {
+		return null;
 	}
 
 	

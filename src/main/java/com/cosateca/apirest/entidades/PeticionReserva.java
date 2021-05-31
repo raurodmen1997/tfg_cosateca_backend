@@ -19,6 +19,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.cosateca.apirest.enumerados.EstadoPeticionReserva;
 
+import validadores.ValueEnum;
+
 @Entity(name = "peticion_reserva")
 public class PeticionReserva implements Serializable {
 
@@ -32,16 +34,17 @@ public class PeticionReserva implements Serializable {
 	private Long id;
 
 	@Column(nullable = false)
-	private EstadoPeticionReserva estado;
+	@ValueEnum(enumClass = EstadoPeticionReserva.class, message = "Debe contener alguno de estos valores: 'EN_PROCESO_DE_RECOGIDA', 'EN_PROPIEDAD', 'RECHAZADA', 'FINALIZADA'")
+	private String estado;
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fecha_fin_reserva;
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy'T'HH:mm:ss")
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fecha_inicio_reserva;
 
 	@Valid
@@ -65,6 +68,7 @@ public class PeticionReserva implements Serializable {
 	@PrePersist
 	public void prePersist() {
 		this.realizada = false;
+		this.estado = EstadoPeticionReserva.EN_PROCESO_DE_RECOGIDA.name();
 	}
 	
 	
@@ -76,13 +80,17 @@ public class PeticionReserva implements Serializable {
 		this.realizada = realizada;
 	}
 
-	public EstadoPeticionReserva getEstado() {
+	
+
+	public String getEstado() {
 		return estado;
 	}
 
-	public void setEstado(EstadoPeticionReserva estado) {
+
+	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
 
 	public Long getId() {
 		return id;

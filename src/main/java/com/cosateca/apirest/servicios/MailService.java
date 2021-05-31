@@ -17,7 +17,7 @@ public class MailService implements IMailService{
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 
-		mailMessage.setFrom("raulrodriguezmendez97@gmail.com");
+		//mailMessage.setFrom("raulrodriguezmendez97@gmail.com");
 		mailMessage.setTo(to);
 		mailMessage.setSubject(subject);
 		mailMessage.setText(body);

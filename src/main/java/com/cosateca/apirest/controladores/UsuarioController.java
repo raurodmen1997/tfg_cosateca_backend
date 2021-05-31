@@ -1,5 +1,6 @@
 package com.cosateca.apirest.controladores;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,9 +10,13 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +33,6 @@ import com.cosateca.apirest.entidades.Usuario;
 import com.cosateca.apirest.enumerados.TipoIdentificacion;
 import com.cosateca.apirest.servicios.CuentaService;
 import com.cosateca.apirest.servicios.UsuarioService;
-import com.cosateca.apirest.utilidades.MD5;
 import com.cosateca.apirest.utilidades.NIE;
 import com.cosateca.apirest.utilidades.NIF;
 
@@ -43,10 +47,19 @@ public class UsuarioController {
 	@Autowired
 	private CuentaService cuentaService;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@GetMapping("/olvidados")
 	public List<Usuario> findAll() {
 		return this.usuarioService.usuarioASerOlvidados();
+	}
+	
+	@GetMapping("olvidados/page/{page}")
+	@Secured("ROLE_ADMIN")
+	public Page<Usuario> peticionesPendientesDeRevision(@PathVariable Integer page) {
+		Pageable pageable = PageRequest.of(page, 4);
+		return this.usuarioService.usuariosASerOlvidados(pageable);
 	}
 	
 	
@@ -72,7 +85,7 @@ public class UsuarioController {
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST); 
 			}
 		}else {
-			if(!NIE.calculaNie(usuario.getCodigo_identificacion().substring(0, usuario.getCodigo_identificacion().length()-1)).equals(usuario.getCodigo_identificacion())) {
+			if(!usuario.getCodigo_identificacion().startsWith("X") || !usuario.getCodigo_identificacion().startsWith("Y") || !usuario.getCodigo_identificacion().startsWith("Z") || !NIE.calculaNie(usuario.getCodigo_identificacion().substring(0, usuario.getCodigo_identificacion().length()-1)).equals(usuario.getCodigo_identificacion())) {
 				response.put("Error en el campo 'codigo_identificacion'", "'".concat(usuario.getCodigo_identificacion()).concat("' no es un NIE válido."));
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST); 
 			}
@@ -80,12 +93,14 @@ public class UsuarioController {
 		
 		
 		try {
-			cuenta.setNombre_perfil(usuario.getCuenta().getNombre_perfil());	
-			cuenta.setPass(MD5.calcularHash(usuario.getCuenta().getPass().getBytes()));
+			cuenta.setNombre_perfil(usuario.getCuenta().getNombre_perfil());
+			String pass = new String(Base64.getDecoder().decode(usuario.getCuenta().getPass()));
+			String passwordBcrypt = passwordEncoder.encode(pass);
+			cuenta.setPass(passwordBcrypt);
 			cuenta.setAutoridad(usuario.getCuenta().getAutoridad());
 			cuentaNueva = this.cuentaService.guardarCuenta(cuenta);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en la tabla 'cuentas' de la base de datos");
+			response.put("mensaje", "Error al realizar el insert en la tabla 'cuentas' de la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}	
@@ -193,6 +208,7 @@ public class UsuarioController {
 	
 	
 	@DeleteMapping("/{usuario_id}")
+	@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> eliminarUsuario(@PathVariable Long usuario_id) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		Usuario usuario = null;
@@ -233,6 +249,7 @@ public class UsuarioController {
 	
 	
 	@PutMapping("/peticionOlvido/{usuario_id}")
+	@Secured("ROLE_USER")
 	public ResponseEntity<?> realizarPeticionOlvido(@PathVariable Long usuario_id) {
 		Map<String, Object> response = new HashMap<String, Object>();
 		Usuario usuario_recuperado = null;
