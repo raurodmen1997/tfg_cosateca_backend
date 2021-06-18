@@ -24,16 +24,14 @@ public class UsuarioService2 implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		Cuenta cuenta = this.cuentaRepository.findCuentaByUser(username);
-		
+		Cuenta cuenta = this.cuentaRepository.findCuentaByUser(username);	
 		if(cuenta == null) {
 			throw new UsernameNotFoundException("Error en el login: no existe el usuario '"+username+"' en el sistema.");
-		}
-		
+		}	
 		List<Cuenta> cuentas = new ArrayList<>();
 		cuentas.add(cuenta);
-		List<GrantedAuthority> autoridades = cuentas.stream().map(x -> new SimpleGrantedAuthority(x.getAutoridad().name())).collect(Collectors.toList());
+		List<GrantedAuthority> autoridades = 
+				cuentas.stream().map(x -> new SimpleGrantedAuthority(x.getAutoridad().name())).collect(Collectors.toList());
 		
 		return new User(username, cuenta.getPass(), true,true, true, true, autoridades);
 	}

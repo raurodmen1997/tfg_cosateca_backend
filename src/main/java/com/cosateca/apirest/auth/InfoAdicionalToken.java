@@ -48,10 +48,14 @@ public class InfoAdicionalToken implements TokenEnhancer{
 		
 		if(cuenta.getAutoridad().equals(Autoridad.ROLE_ADMIN)) {
 			info.put("nombre", ayuntamiento.getNombre());
+			info.put("municipio", ayuntamiento.getMunicipio());
+			info.put("provincia", ayuntamiento.getProvincia());
 			info.put("direccion_email", ayuntamiento.getDireccion_email());
 			info.put("telefono", ayuntamiento.getTelefono());
 			info.put("direccion", ayuntamiento.getDireccion());
+			info.put("codigo_postal", ayuntamiento.getCodigos_postales());
 			info.put("id", ayuntamiento.getId());
+			info.put("id_cuenta", ayuntamiento.getCuenta().getId());
 		}
 		
 		if(cuenta.getAutoridad().equals(Autoridad.ROLE_USER)) {

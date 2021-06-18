@@ -81,9 +81,10 @@ public class ImagenController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
 		
-		return new ResponseEntity<Imagen>(imagenNueva,HttpStatus.CREATED); 
-			
+		return new ResponseEntity<Imagen>(imagenNueva,HttpStatus.CREATED); 		
 	}
+	
+	
 	
 	@PutMapping("/{imagen_id}")
 	@Secured("ROLE_USER")

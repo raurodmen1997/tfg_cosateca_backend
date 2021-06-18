@@ -1,12 +1,9 @@
 package com.cosateca.apirest.entidades;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -45,10 +42,17 @@ public class Ayuntamiento implements Serializable {
 	@Column(nullable = false)
 	private String provincia;
 	
+	/*
 	@ElementCollection
 	@CollectionTable(joinColumns = @JoinColumn(name = "ayuntamiento_id"))
 	@Column(name = "codigo_postal")
 	private List<Integer> codigos_postales;
+	*/
+	
+	@NotBlank
+	@Column(nullable = false)
+	private String codigos_postales;
+	
 	
 	@Valid
 	@OneToOne(cascade = CascadeType.ALL)
@@ -120,6 +124,7 @@ public class Ayuntamiento implements Serializable {
 		this.provincia = provincia;
 	}
 
+	/*
 	public List<Integer> getCodigos_postales() {
 		return codigos_postales;
 	}
@@ -127,9 +132,19 @@ public class Ayuntamiento implements Serializable {
 	public void setCodigos_postales(List<Integer> codigos_postales) {
 		this.codigos_postales = codigos_postales;
 	}
+	*/
+	
 
 	public Cuenta getCuenta() {
 		return cuenta;
+	}
+
+	public String getCodigos_postales() {
+		return codigos_postales;
+	}
+
+	public void setCodigos_postales(String codigos_postales) {
+		this.codigos_postales = codigos_postales;
 	}
 
 	public void setCuenta(Cuenta cuenta) {

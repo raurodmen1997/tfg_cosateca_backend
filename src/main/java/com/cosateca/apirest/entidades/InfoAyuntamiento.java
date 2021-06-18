@@ -9,7 +9,7 @@ public class InfoAyuntamiento {
 	private String telefono;
 	private String direccion_correo;
 	private String direccion;
-	private List<Integer> codigos_postales;
+	private String codigos_postales;
 	private List<String> horarios;
 	
 	
@@ -47,12 +47,17 @@ public class InfoAyuntamiento {
 	public void setDireccion_correo(String direccion_correo) {
 		this.direccion_correo = direccion_correo;
 	}
-	public List<Integer> getCodigos_postales() {
+	
+	public String getCodigos_postales() {
 		return codigos_postales;
 	}
-	public void setCodigos_postales(List<Integer> codigos_postales) {
+
+
+	public void setCodigos_postales(String codigos_postales) {
 		this.codigos_postales = codigos_postales;
 	}
+
+
 	public List<String> getHorarios() {
 		return horarios;
 	}

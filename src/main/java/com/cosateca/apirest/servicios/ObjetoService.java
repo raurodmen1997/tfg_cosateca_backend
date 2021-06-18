@@ -29,4 +29,29 @@ public class ObjetoService implements IObjetoService{
 		return this.objetoRepository.findById(objeto_id).orElse(null);
 	}
 
+	@Override
+	public List<Objeto> objetosAccesibles() {
+		return this.objetoRepository.objetosAccesibles();
+	}
+
+	@Override
+	public List<Objeto> objetosPorCategoriaAccesible(String categoria) {
+		return this.objetoRepository.objetosPorCateogiraAccesible(categoria);
+	}
+
+	@Override
+	public List<Objeto> objetosPorCategoriaAdmin(String categoria) {
+		return this.objetoRepository.objetosPorCateogiraAdmin(categoria);
+	}
+
+	@Override
+	public List<Objeto> objetosPorCategoriaAccesibleyAccesibilidad(String categoria, Boolean accesible) {
+		return this.objetoRepository.objetosPorCateogiraYAccesibilidad(categoria, accesible);
+	}
+
+	@Override
+	public List<Objeto> objetosInaccesibles() {
+		return this.objetoRepository.objetosInaccesibles();
+	}
+
 }

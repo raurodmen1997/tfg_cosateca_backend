@@ -79,5 +79,11 @@ public class UsuarioService implements IUsuarioService{
 		return null;
 	}
 
+
+	@Override
+	public Usuario usuarioPorCodigoIdentificacion(String codigo_identificacion) {
+		return this.usuarioRepository.usuarioPorCodigoIdentificacion(codigo_identificacion);
+	}
+
 	
 }

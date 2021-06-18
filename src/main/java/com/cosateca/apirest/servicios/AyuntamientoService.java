@@ -25,4 +25,14 @@ public class AyuntamientoService implements IAyuntamientoService{
 		return this.ayuntamientoRepository.findAll().get(0);
 	}
 
+	@Override
+	public Ayuntamiento findOne(Long ayuntamiento_id) {
+		return this.ayuntamientoRepository.findById(ayuntamiento_id).orElse(null);
+	}
+
+	@Override
+	public Ayuntamiento guardarAyuntameinto(Ayuntamiento ayuntamiento) {
+		return this.ayuntamientoRepository.save(ayuntamiento);
+	}
+
 }

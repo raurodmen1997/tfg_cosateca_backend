@@ -78,17 +78,13 @@ public class PeticionDonacionController {
 		return this.peticionDonacionService.peticionesPendienteDeRevision(pageable);
 	}
 	
-	
-	
-
 	@PostMapping("")
 	@Secured("ROLE_USER")
 	public ResponseEntity<?> crearPeticionDonacion(@Valid @RequestBody PeticionDonacion peticionDonacion, BindingResult result) throws Exception {
 		Map<String, Object> response = new HashMap<String, Object>();
 		PeticionDonacion peticionDonacionNueva = null;
 		Ayuntamiento ayuntamiento = null;
-		Usuario usuario = null;
-		
+		Usuario usuario = null;	
 		if(result.hasErrors()) {
 			List<String> errores = result.getFieldErrors().stream()
 				.map(err -> "Error en el campo '" + err.getField() + "': " + err.getDefaultMessage())
@@ -96,7 +92,6 @@ public class PeticionDonacionController {
 			response.put("errores", errores);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST); 
 		}
-		
 		try {
 			ayuntamiento = this.ayuntamientoService.obtenerAyuntamiento();
 		} catch (DataAccessException e) {
@@ -104,7 +99,6 @@ public class PeticionDonacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 		try {
 			usuario = this.usuarioService.findOne(peticionDonacion.getUsuario().getId());
 		} catch (DataAccessException e) {
@@ -112,7 +106,6 @@ public class PeticionDonacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 		peticionDonacion.setUsuario(usuario);
 		peticionDonacion.setAyuntamiento(ayuntamiento);
 		try {
@@ -126,37 +119,28 @@ public class PeticionDonacionController {
 		response.put("peticionDonacion", peticionDonacionNueva);
 		response.put("mensaje", "Se ha creado la petición de donación con éxito.");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
-
 	}
 	
 	
-	@PutMapping("/aceptar/{peticion_donacion_id}")
-	@Secured("ROLE_ADMIN")
+	@PutMapping("/aceptar/{peticion_donacion_id}")@Secured("ROLE_ADMIN")
 	public ResponseEntity<?> aceptarPeticionDonacion(@PathVariable Long peticion_donacion_id) throws Exception {
 		Map<String, Object> response = new HashMap<String, Object>();
-		PeticionDonacion peticionDonacionActualizado = null;
-		PeticionDonacion peticionDonacionRecuperado = null;
-		Objeto objetoConstruido = null;
-		Objeto objetoNuevo = null;
-		
+		PeticionDonacion peticionDonacionActualizado = null;PeticionDonacion peticionDonacionRecuperado = null;Objeto objetoConstruido = null;Objeto objetoNuevo = null;	
 		try {
 			peticionDonacionRecuperado = this.peticionDonacionService.findOne(peticion_donacion_id);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al realizar la consulta en la base de datos.");
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
-		}
-		
+		}	
 		if(peticionDonacionRecuperado == null) {
 			response.put("mensaje",	 "La petición de donacion con id '".concat(peticion_donacion_id.toString()).concat("' no existe."));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
-		}
-		
+		}	
 		if(!peticionDonacionRecuperado.getEstado().equals(EstadoPeticionDonacion.PENDIENTE_DE_REVISION.name())) {
 			response.put("mensaje",	 "La petición de donación no se encuentra en estado '".concat(EstadoPeticionDonacion.PENDIENTE_DE_REVISION.name()).concat("'."));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND); 
-		}
-			
+		}		
 		try {
 			peticionDonacionRecuperado.setEstado("ACEPTADA");
 			peticionDonacionActualizado = this.peticionDonacionService.guardaPeticionDonacion(peticionDonacionRecuperado);
@@ -165,7 +149,6 @@ public class PeticionDonacionController {
 			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
 		}
-		
 		try {
 			objetoConstruido = new Objeto();
 			objetoConstruido.setAyuntamiento(peticionDonacionActualizado.getAyuntamiento());
@@ -175,16 +158,11 @@ public class PeticionDonacionController {
 			objetoConstruido.setImagen(peticionDonacionActualizado.getImagen());
 			objetoNuevo = this.objetoService.guardarObjeto(objetoConstruido);
 		} catch (DataAccessException e) {
-			response.put("mensaje", "Error al realizar el insert en la tabla en la base de datos.");
-			response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
+			response.put("mensaje", "Error al realizar el insert en la tabla en la base de datos.");response.put("error", e.getMessage().concat(": ").concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR); 
-		}
-		
-		response.put("peticionDonacion", peticionDonacionActualizado);
-		response.put("objeto", objetoNuevo);
-		response.put("mensaje", "Se ha añadido el objeto a la lista de objetos del sistema.");
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED); 
-			
+		}	
+		response.put("peticionDonacion", peticionDonacionActualizado);response.put("objeto", objetoNuevo);response.put("mensaje", "Se ha añadido el objeto a la lista de objetos del sistema.");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED); 		
 	}
 	
 	

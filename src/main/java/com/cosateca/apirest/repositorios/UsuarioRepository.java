@@ -14,6 +14,9 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	@Query("select u from usuarios u where u.cuenta.id=?1")
 	Usuario findUsuarioByCuenta(Long id);
 	
+	@Query("select u from usuarios u where u.codigo_identificacion=?1")
+	Usuario usuarioPorCodigoIdentificacion(String codigo_identificacion);
+	
 	/*
 	@Query("select u from usuarios u where u.olvidado = 1")
 	List<Usuario> usuariosASerOlvidados();

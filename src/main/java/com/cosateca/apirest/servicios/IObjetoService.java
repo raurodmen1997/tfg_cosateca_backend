@@ -11,5 +11,15 @@ public interface IObjetoService{
 	Objeto guardarObjeto(Objeto objeto);
 	
 	Objeto findOne(Long objeto_id);
+	
+	List<Objeto> objetosAccesibles();
+	
+	List<Objeto> objetosInaccesibles();
+	
+	List<Objeto> objetosPorCategoriaAccesible(String categoria);
+	
+	List<Objeto> objetosPorCategoriaAccesibleyAccesibilidad(String categoria, Boolean accesible);
+	
+	List<Objeto> objetosPorCategoriaAdmin(String categoria);
 
 }

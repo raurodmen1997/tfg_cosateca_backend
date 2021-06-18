@@ -17,6 +17,8 @@ public interface IUsuarioService {
 	
 	Usuario findOne(Long id);
 	
+	Usuario usuarioPorCodigoIdentificacion(String codigo_identificacion);
+	
 	List<Usuario> usuarioASerOlvidados();
 	
 	void eliminarUsuario(Usuario usuario);

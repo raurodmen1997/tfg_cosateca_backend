@@ -21,7 +21,7 @@ import com.cosateca.apirest.enumerados.EstadoPeticionReserva;
 
 import validadores.ValueEnum;
 
-@Entity(name = "peticion_reserva")
+@Entity(name = "peticiones_reservas")
 public class PeticionReserva implements Serializable {
 
 	/**
@@ -38,12 +38,12 @@ public class PeticionReserva implements Serializable {
 	private String estado;
 
 	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fecha_fin_reserva;
 
 	@Column(nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date fecha_inicio_reserva;
 
@@ -62,16 +62,38 @@ public class PeticionReserva implements Serializable {
 	@JoinColumn(name = "objeto_id", nullable = false)
 	private Objeto objeto;
 
+	/*
 	@Column(nullable = false)
 	private Boolean realizada;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss.SSSZ")
+	private Date fecha_realizada;
+	*/
 	
 	@PrePersist
 	public void prePersist() {
-		this.realizada = false;
+		//this.realizada = false;
 		this.estado = EstadoPeticionReserva.EN_PROCESO_DE_RECOGIDA.name();
 	}
-	
-	
+
+
+/*
+
+	public Date getFecha_realizada() {
+		return fecha_realizada;
+	}
+
+
+
+
+	public void setFecha_realizada(Date fecha_realizada) {
+		this.fecha_realizada = fecha_realizada;
+	}
+
+
+
+
 	public Boolean getRealizada() {
 		return realizada;
 	}
@@ -79,6 +101,7 @@ public class PeticionReserva implements Serializable {
 	public void setRealizada(Boolean realizada) {
 		this.realizada = realizada;
 	}
+	*/
 
 	
 

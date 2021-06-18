@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cosateca.apirest.entidades.Horario;
+import com.cosateca.apirest.servicios.AyuntamientoService;
 import com.cosateca.apirest.servicios.HorarioService;
 
 @Secured("ROLE_ADMIN")
@@ -37,6 +38,9 @@ public class HorarioController {
 	
 	@Autowired
 	private HorarioService horarioService;
+	
+	@Autowired
+	private AyuntamientoService ayuntamientoService;
 	
 	
 	
@@ -89,6 +93,7 @@ public class HorarioController {
 		}
 		
 		try {
+			horario.setAyuntamiento(this.ayuntamientoService.obtenerAyuntamiento());
 			horarioNuevo = horarioService.guardarHorario(horario);
 		}catch(DataAccessException e) {
 			response.put("mensaje", "Error al realizar el insert en la base de datos");
